@@ -13,7 +13,7 @@ def parse_args():
 
 
 def get_results_page(org: str, page: int) -> tuple[dict, dict]:
-    auth_token = os.environ['GITHUB_TOKEN']
+    auth_token = os.environ['GH_TOKEN']
     headers = {
         'Authorization': f'Bearer: {auth_token}',
         'Accept': 'application/vnd.github.text-match+json'
