@@ -17,7 +17,11 @@ I aim for it be straightforward enough that an inexperienced Python user can rea
 
 The script allows you to specify actions providers that you trust, and filter them out of the results. That makes it much easier to spot what's left. You can specify multiple providers to trust and filter.
 
-The script requires a GitHub access token in the environment variable `GH_TOKEN`. This is the case even for public repositories as [GitHub does not allow unauthenticated code search](https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-code). I use a fine-grained personal access token with read-only access to repository contents to minimise risk of exploitation.
+### GitHub access tokens
+
+The script requires a GitHub access token in the environment variable `GH_TOKEN`. This is the case even for public repositories as [GitHub does not allow unauthenticated code search](https://docs.github.com/en/rest/search/search?apiVersion=2022-11-28#search-code).
+
+I've not yet found the correct permissions to search private repositories in an org with a fine-grained access token, but it works with a classic token that has full repo permissions. Will update when more minimal permissions are confirmed.
 
 **Don't just trust me! Review the script to satisfy yourself that it is safe for you to run with your GitHub token!**
 
