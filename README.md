@@ -4,7 +4,7 @@
 
 I would not recommend this solution or approach, as it it unlikely to give complete results in all but the simplest repositories.
 
-Despite not being referenced in any way I can see from the API documentat, [this document outlines current limitations in the code search API](https://docs.github.com/en/search-github/searching-on-github/searching-code), including two specific limitations that render this approach invalid:
+Despite not being referenced in any way I can see from the API documentation, [this document outlines current limitations in the code search API](https://docs.github.com/en/search-github/searching-on-github/searching-code), including two specific limitations that render this approach invalid:
 
 - Only repositories that have had activity or have been returned in search results in the last year are searchable.
   - so some potentially large subset of repositories will not be searched.
