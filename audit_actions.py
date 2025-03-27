@@ -15,11 +15,11 @@ def parse_args():
 def get_results_page(org: str, page: int) -> tuple[dict, dict]:
     auth_token = os.environ['GH_TOKEN']
     headers = {
-        'Authorization': f'Bearer: {auth_token}',
+        'Authorization': f'Bearer {auth_token}',
         'Accept': 'application/vnd.github.text-match+json'
     }
     query = f'org:{org} path:.github NOT is_fork uses:'
-    url = f'https://api.github.com/search/code?per_page=10&q={urllib.parse.quote(query)}' + (f'&page={page}' if page > 1 else '')
+    url = f'https://api.github.com/search/code?q={urllib.parse.quote(query)}' + (f'&page={page}' if page > 1 else '')
     request = urllib.request.Request(url)
     request.add_header('Authorization',f'Bearer {auth_token}')
     request.add_header('Accept','application/vnd.github.text-match+json')
