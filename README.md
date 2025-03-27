@@ -4,7 +4,7 @@ I don't think it's possible to directly check for actions you don't trust at the
 
 This is an attempt at a simple, dependency-free, one-file script to enumerate untrusted GitHub actions in an org. It can help you identify actions that you're not expecting, but is experimental and may not check all repositories. It can help you identify problematic actions, but doesn't offer any guarantees.
 
-You can and should double check findings in the GitHub UI. A query to enumerate all examples of `uses:` in the directory tree below `.github` in an org to get you started: `org:brabster path:.github NOT is:fork "uses: "`
+You can and probably should double check findings in the GitHub UI. A query to enumerate all examples of `uses:` in the directory tree below `.github` in an org to get you started: `org:brabster path:.github NOT is:fork "uses: "`
 
 **This repository is provided without warranty or commitment to maintain. I reserve the right to reject pull requests and issues raised at my discretion.**
 
@@ -85,7 +85,3 @@ brabster/dbt_materialized_udf: actions/upload-artifact@v3 ".github/actions/dbt_b
 $ python audit_actions.py --org brabster --trust google-github-actions --trust actions
 $
 ```
-
-## Issues
-
-GitHub rate limits calls to the code search API to 10 per minute. I do not handle the 403 error that happens if you hit this limit as I have not had the problem. Happy to look at simple solutions if you need to solve that problem and wish to contribute back.
