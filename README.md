@@ -1,4 +1,38 @@
-# audit-actions
+# audit-github-actions
+
+## Disclaimer
+
+I would not recommend this solution or approach, as it it unlikely to give complete results in all but the simplest repositories.
+
+Despite not being referenced in any way I can see from the API documentat, [this document outlines current limitations in the code search API](https://docs.github.com/en/search-github/searching-on-github/searching-code), including two specific limitations that render this approach invalid:
+
+- Only repositories that have had activity or have been returned in search results in the last year are searchable.
+  - so some potentially large subset of repositories will not be searched.
+- At most, search results can show two fragments from the same file, but there may be more results within the file.
+  - so longer workflow files with many `uses: ` clauses will only match the first few and ignore the rest.
+
+[I've raised an issue to clearly indicate ALL the limitations of the code search API](https://github.com/github/docs/issues/37124) in, y'know, the code seach API documentation 🤦
+
+In the meantime - I've briefly explored other options.
+
+### Actions policies
+
+I can't see these options in my own `brabster` GitHub org, but I can in my `temperedworks` org. I'm able to allow only specific actions and workflows to execute in my org, so I can effectively disable any actions from a provider that I don't trust. Under `Settings`, in `Actions`, `General`, I can specify only GitHub-provided actions, and a comma-separated list of other providers I trust.
+
+![actions policy page with only github checked and google/aws actions allowed](https://github.com/user-attachments/assets/313ea460-90a0-4d0d-80df-b57250abb891)
+
+I'm not the trusting type, so I wanted to see what happened. I set up a public repo with three workflows - one using only `actions/checkout` (allowed), another using `google-github-actions/setup-gcloud` (allowed) and a third using `azure/setup-helm` (not allowed). Running the workflows...
+
+![the google and github actions ran successfully, the azure one did not](https://github.com/user-attachments/assets/60446121-1596-480b-ad48-bde0707b584d)
+
+The error on the failed action shows it was the actions policies that failed it.
+
+`azure/setup-helm@v4.3.0 is not allowed to be used in temperedworks/workflow-policy-experiments. Actions in this workflow must be: within a repository owned by temperedworks, created by GitHub, or matching the following: aws-actions/*, google-github-actions/*.`
+
+[Here are the official docs for actions policies.](https://docs.github.com/en/enterprise-cloud@latest/admin/enforcing-policies/enforcing-policies-for-your-enterprise/enforcing-policies-for-github-actions-in-your-enterprise#allow-enterprise-and-select-non-enterprise-actions-and-reusable-workflows). It seems that private repositories are only supported in certain payment plans, so that might be a consideration.
+
+
+## Original README begins
 
 I don't think it's possible to directly check for actions you don't trust at the GitHub search UI, due to limitations in regex support and an inability to combine clauses to operate on the same line rather than in the same file.
 
