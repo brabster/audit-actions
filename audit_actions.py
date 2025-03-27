@@ -1,9 +1,13 @@
 import argparse
 import json
+import logging
 import os
+import time
 import urllib.parse
 import urllib.request
 
+logging.basicConfig(level=os.environ.get('LOG_LEVEL', 'INFO').upper())
+LOGGER = logging.getLogger(__name__)
 
 def parse_args():
     parser = argparse.ArgumentParser()
@@ -12,19 +16,23 @@ def parse_args():
     return parser.parse_args()
 
 
-def get_results_page(org: str, page: int) -> tuple[dict, dict]:
+def get_results_page(org: str, page: int, page_size: int = 100) -> tuple[dict, dict]:
+    rate_limit_wait_secs = 60
     auth_token = os.environ['GH_TOKEN']
-    headers = {
-        'Authorization': f'Bearer {auth_token}',
-        'Accept': 'application/vnd.github.text-match+json'
-    }
     query = f'org:{org} path:.github NOT is_fork uses:'
-    url = f'https://api.github.com/search/code?q={urllib.parse.quote(query)}' + (f'&page={page}' if page > 1 else '')
+    url = f'https://api.github.com/search/code?q={urllib.parse.quote(query)}&per_page={page_size}' + (f'&page={page}' if page > 1 else '')
     request = urllib.request.Request(url)
     request.add_header('Authorization',f'Bearer {auth_token}')
     request.add_header('Accept','application/vnd.github.text-match+json')
-    with urllib.request.urlopen(request) as response:
-        return (response.headers, json.load(response))
+    while True:
+        LOGGER.debug(f'Requesting {url}...')
+        try:
+            with urllib.request.urlopen(request) as response:
+                return (response.headers, json.load(response))
+        except Exception as ex:
+            if '403: Forbidden' in str(ex):
+                LOGGER.info(f'Rate limited, waiting to retry in {rate_limit_wait_secs}')
+                time.sleep(rate_limit_wait_secs)
 
 
 def uses_non_local_action(line: str) -> bool:

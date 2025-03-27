@@ -2,7 +2,8 @@
 
 I don't think it's possible to directly check for actions you don't trust at the GitHub search UI, due to limitations in regex support and an inability to combine clauses to operate on the same line rather than in the same file.
 
-This is an attempt at a simple, dependency-free, one-file script to enumerate untrusted GitHub actions in an org.
+This is an attempt at a simple, dependency-free, one-file script to enumerate untrusted GitHub actions in an org. It can help you identify actions that you're not expecting, but is experimental and may not check all repositories. It can help you identify problematic actions, but doesn't offer any guarantees.
+
 You can and should double check findings in the GitHub UI. A query to enumerate all examples of `uses:` in the directory tree below `.github` in an org to get you started: `org:brabster path:.github NOT is:fork "uses: "`
 
 **This repository is provided without warranty or commitment to maintain. I reserve the right to reject pull requests and issues raised at my discretion.**
