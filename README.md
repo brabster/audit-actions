@@ -37,6 +37,10 @@ options:
                         trusted actions provider, may be used more than once
 ```
 
+### Logging
+
+Basic logging is set up and can be controlled by the `LOG_LEVEL` env var. Set to `WARN` to disable rate limit info. Logging will go to the console, and you can redirect just the audit output to a file like this: `python audit_actions.py --org equalexperts > out.txt`
+
 ### Audit with no trusted providers
 
 ```console
