@@ -17,9 +17,8 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: ${{ matrix.version }}
+          python-version: ${{ matrix.python_version }}
           check-latest: true
 
       - name: run_unit_tests
         run: python -m doctest audit_actions.py
-        
